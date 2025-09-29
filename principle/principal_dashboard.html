@@ -1,241 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Principal Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <style>
-        :root {
-            --primary-color: #007bff;
-            --primary-hover: #0056b3;
-            --background-color: #f8f9fa;
-            --card-background: #ffffff;
-            --text-color: #343a40;
-            --secondary-text: #6c757d;
-            --shadow-elevation: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --border-radius-lg: 10px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Principal Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root {
+    --primary-color: #007bff;
+    --primary-hover: #0056b3;
+    --background-color: #f8f9fa;
+    --card-background: #ffffff;
+    --text-color: #343a40;
+    --secondary-text: #6c757d;
+    --shadow-elevation: 0 4px 12px rgba(0,0,0,0.08);
+    --border-radius-lg: 10px;
+}
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin:0; padding:0;
+    background: var(--background-color);
+    color: var(--text-color);
+    min-height:100vh;
+    display:none;
+    position:relative;
+}
+.container {max-width:1300px; margin:0 auto; padding:25px;}
+.header {
+    display:flex; justify-content:space-between; align-items:center;
+    background: var(--primary-color); padding:18px 30px; color:white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom:25px;
+}
+.header h2 {margin:0; font-weight:600;}
+#welcome {font-size:1.2em; font-weight:500; color:var(--primary-color); margin-bottom:15px; padding-left:5px;}
+.dashboard-title {font-weight:700; font-size:1.8em; margin-bottom:20px; border-bottom:3px solid #dee2e6; padding-bottom:10px;}
+#absenceList {display:grid; gap:20px; grid-template-columns:repeat(auto-fill, minmax(300px,1fr));}
+.card {background:var(--card-background); padding:20px; border-radius:var(--border-radius-lg); box-shadow:var(--shadow-elevation); transition: transform 0.2s; border-left:5px solid var(--primary-color);}
+.card:hover {transform:translateY(-3px); box-shadow:0 8px 15px rgba(0,0,0,0.12);}
+.card h3 {color:var(--primary-color); margin-top:0; margin-bottom:10px; font-weight:600; font-size:1.3em;}
+.card p {margin:8px 0; font-size:0.95em;}
+.card strong {font-weight:600;}
+.card small {display:block; margin-top:10px; color:var(--secondary-text); font-size:0.8em; border-top:1px solid #eee; padding-top:5px;}
+.btn-logout {background:none; color:white; border:1px solid white; padding:8px 15px; border-radius:5px; cursor:pointer; font-size:14px; transition: background 0.3s;}
+.btn-logout:hover {background: rgba(255,255,255,0.15);}
+.btn-reset {margin-top:15px; background:#dc3545; color:white; border:none; padding:10px 15px; border-radius:5px; cursor:pointer; transition: background 0.3s;}
+.btn-reset:hover {background:#c82333;}
+.footer {position:fixed; bottom:10px; left:10px;}
+.footer img {width:240px; height:auto; cursor:pointer;}
+.footer-right {position:fixed; bottom:10px; right:10px; color:#555; font-size:20px;}
+</style>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { getFirestore, collection, onSnapshot, query, orderBy, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            padding: 0;
-            margin: 0;
-            background: var(--background-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: none;
-        }
+const firebaseConfig = {
+    apiKey: "AIzaSyBX3-pcg4gCUzHdPuRhP9BPTKbJr4zM2Mc",
+    authDomain: "school-attendance-81385.firebaseapp.com",
+    projectId: "school-attendance-81385",
+    storageBucket: "school-attendance-81385.firebasestorage.app",
+    messagingSenderId: "232756214397",
+    appId: "1:232756214397:web:67de1961741864be744f14"
+};
 
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 25px;
-        }
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--primary-color);
-            padding: 18px 30px;
-            color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 25px;
-        }
+onAuthStateChanged(auth, (user)=>{
+    if(!user){ window.location.href="principal_login.html"; } 
+    else{
+        document.body.style.display="block";
+        const principalName = user.email.split('@')[0];
+        document.getElementById("welcome").innerHTML = `<i class="fas fa-handshake"></i> Welcome, <b>${principalName}</b>. Here are the latest absence reports.`;
+    }
+});
 
-        .header h2 {
-            margin: 0;
-            font-weight: 600;
-        }
+const q = query(collection(db,"absences"), orderBy("timestamp","desc"));
+const container = document.getElementById("absenceList");
+onSnapshot(q, snapshot=>{
+    container.innerHTML="";
+    snapshot.forEach(docSnap=>{
+        const data = docSnap.data();
+        const card = document.createElement("div");
+        card.className="card";
+        const formattedTime = data.timestamp ? data.timestamp.toDate().toLocaleString('en-US',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : 'N/A';
+        card.innerHTML=`
+            <h3><i class="fas fa-school"></i> ${data.class}</h3>
+            <p><strong><i class="fas fa-user-tie"></i> Teacher:</strong> ${data.teacher}</p>
+            <p><strong><i class="fas fa-user-times"></i> Absentees:</strong> ${data.absentees}</p>
+            <small><i class="fas fa-clock"></i> Reported On: ${formattedTime}</small>
+        `;
+        container.appendChild(card);
+    });
+    if(snapshot.empty){
+        container.innerHTML=`<div style="text-align:center; padding:40px; color:var(--secondary-text);">
+        <i class="fas fa-bell-slash" style="font-size:2em; margin-bottom:10px;"></i>
+        <p>No absence reports submitted yet.</p></div>`;
+    }
+});
 
-        #welcome {
-            font-size: 1.2em;
-            font-weight: 500;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            padding-left: 5px;
-        }
-        
-        .dashboard-title {
-            font-weight: 700;
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            border-bottom: 3px solid #dee2e6;
-            padding-bottom: 10px;
-            color: var(--text-color);
-        }
+// Reset button function
+window.resetAbsences = async function(){
+    if(!confirm("Are you sure you want to reset today's absences?")) return;
+    const snapshot = await getDocs(collection(db,"absences"));
+    snapshot.forEach(async docSnap=>{
+        await deleteDoc(doc(db,"absences",docSnap.id));
+    });
+    alert("All absence reports have been reset for today ✅");
+}
 
-        #absenceList {
-            display: grid;
-            gap: 20px;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background: var(--card-background);
-            padding: 20px;
-            border-radius: var(--border-radius-lg);
-            box-shadow: var(--shadow-elevation);
-            transition: transform 0.2s;
-            border-left: 5px solid var(--primary-color);
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.12);
-        }
-
-        .card h3 {
-            color: var(--primary-color);
-            margin-top: 0;
-            margin-bottom: 10px;
-            font-weight: 600;
-            font-size: 1.3em;
-        }
-        
-        .card p {
-            margin: 8px 0;
-            font-size: 0.95em;
-        }
-
-        .card strong {
-            font-weight: 600;
-        }
-        
-        .card small {
-            display: block;
-            margin-top: 10px;
-            color: var(--secondary-text);
-            font-size: 0.8em;
-            border-top: 1px solid #eee;
-            padding-top: 5px;
-        }
-
-        .btn-logout, .btn-reset {
-            background: none;
-            color: white;
-            border: 1px solid white;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-
-        .btn-logout:hover, .btn-reset:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .btn-reset {
-            margin-bottom: 20px;
-            background: var(--primary-color);
-        }
-
-        .btn-reset:hover {
-            background: var(--primary-hover);
-        }
-
-    </style>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, query, orderBy, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBX3-pcg4gCUzHdPuRhP9BPTKbJr4zM2Mc",
-            authDomain: "school-attendance-81385.firebaseapp.com",
-            projectId: "school-attendance-81385",
-            storageBucket: "school-attendance-81385.firebasestorage.app",
-            messagingSenderId: "232756214397",
-            appId: "1:232756214397:web:67de1961741864be744f14"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                window.location.href = "principal_login.html";
-            } else {
-                document.body.style.display = "block";
-                const principalName = user.email.split('@')[0];
-                document.getElementById("welcome").innerHTML = `<i class="fas fa-handshake"></i> Welcome, <b>${principalName}</b>. Here are the latest absence reports.`;
-            }
-        });
-
-        const absenceList = document.getElementById("absenceList");
-        const absenceCollection = collection(db, "absences");
-        const q = query(absenceCollection, orderBy("timestamp", "desc"));
-
-        onSnapshot(q, (snapshot) => {
-            absenceList.innerHTML = "";
-            snapshot.forEach(docSnap => {
-                const data = docSnap.data();
-                const card = document.createElement("div");
-                card.className = "card";
-
-                const formattedTime = data.timestamp ? data.timestamp.toDate().toLocaleString('en-US', { 
-                    year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
-                }) : 'N/A';
-
-                card.innerHTML = `
-                    <h3><i class="fas fa-school"></i> ${data.class}</h3>
-                    <p><strong><i class="fas fa-user-tie"></i> Teacher:</strong> ${data.teacher}</p>
-                    <p><strong><i class="fas fa-user-times"></i> Absentees:</strong> ${data.absentees}</p>
-                    <small><i class="fas fa-clock"></i> Reported On: ${formattedTime}</small>
-                `;
-                absenceList.appendChild(card);
-            });
-
-            if (snapshot.empty) {
-                absenceList.innerHTML = `<div style="text-align: center; padding: 40px; color: var(--secondary-text);">
-                                        <i class="fas fa-bell-slash" style="font-size: 2em; margin-bottom: 10px;"></i>
-                                        <p>No absence reports submitted yet.</p>
-                                    </div>`;
-            }
-        });
-
-        window.resetDailyAbsences = async function() {
-            const today = new Date().toISOString().split('T')[0];
-            const qToday = query(absenceCollection, where("date", "==", today));
-            const snapshot = await getDocs(qToday);
-
-            if (snapshot.empty) {
-                alert("No absences to reset for today.");
-                return;
-            }
-
-            if (!confirm("Are you sure you want to reset all today's absences?")) return;
-
-            snapshot.forEach(async docSnap => {
-                await deleteDoc(doc(db, "absences", docSnap.id));
-            });
-
-            alert("Today's absences have been reset ✅");
-        }
-
-        window.logout = async function() {
-            await signOut(auth);
-            window.location.href = "principal_login.html";
-        }
-    </script>
+window.logout = async function(){ await signOut(auth); window.location.href="principal_login.html"; }
+</script>
 </head>
 <body>
-    <div class="header">
-        <h2><i class="fas fa-tachometer-alt"></i> Principal Dashboard</h2>
-        <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
-    </div>
+<div class="header">
+<h2><i class="fas fa-tachometer-alt"></i> Principal Dashboard</h2>
+<button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+</div>
 
-    <div class="container">
-        <div id="welcome">Loading...</div>
-        <button class="btn-reset" onclick="resetDailyAbsences()"><i class="fas fa-trash"></i> Reset Today's Absences</button>
-        <div class="dashboard-title">Absence Reports</div>
-        <div id="absenceList"></div>
-    </div>
+<div class="container">
+<div id="welcome">Loading...</div>
+<div class="dashboard-title">Absence Reports</div>
+<button class="btn-reset" onclick="resetAbsences()"><i class="fas fa-trash-alt"></i> Reset Today's Absences</button>
+<div id="absenceList"></div>
+</div>
+
+<div class="footer">
+<a href="about.html"><img src="logo 1.png" alt="School Logo"></a>
+</div>
+<div class="footer-right">Made by Ziad</div>
 </body>
 </html>
