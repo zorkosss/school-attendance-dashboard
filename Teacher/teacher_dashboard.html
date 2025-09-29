@@ -6,6 +6,7 @@
 <title>Teacher Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 <style>
 :root {
     --primary-color: #4CAF50;
@@ -14,70 +15,43 @@
     --card-background: #ffffff;
     --text-color: #333;
     --secondary-color: #007bff;
-    --shadow-light: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
     --border-radius-lg: 12px;
     --border-radius-sm: 6px;
 }
 body {
     font-family: 'Poppins', sans-serif;
-    padding:0; margin:0;
+    padding: 0; margin: 0;
     background: var(--background-color);
     color: var(--text-color);
-    min-height:100vh;
-    display:none;
-    position:relative;
+    min-height: 100vh;
+    display: none; /* Hidden by default until user is verified */
 }
-.container {max-width:1200px; margin:0 auto; padding:20px;}
-.header {
-    display:flex; justify-content:space-between; align-items:center;
-    background: var(--primary-color); padding:15px 30px; color:white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.header { display: flex; justify-content: space-between; align-items: center; background: var(--primary-color); padding: 15px 30px; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);}
+.header h2 { margin:0; font-weight:600; }
+.welcome-card { background: var(--secondary-color); color: white; padding:25px; border-radius:var(--border-radius-lg); margin-bottom:25px; font-size:1.1em; display:flex; justify-content:space-between; align-items:center;}
+#teacherName { font-weight:600; }
+.content { background: var(--card-background); padding:30px; border-radius:var(--border-radius-lg); box-shadow: var(--shadow-light);}
+h3 { color: var(--text-color); font-weight:600; margin-top:0; border-bottom:2px solid #eee; padding-bottom:10px; margin-bottom:20px;}
+label { display:block; margin-top:15px; margin-bottom:5px; font-weight:500;}
+input[type="text"], select, textarea {
+    width:100%; padding:12px; border-radius:var(--border-radius-sm); border:1px solid #ddd; box-sizing:border-box; font-family:inherit;
 }
-.header h2 {margin:0; font-weight:600;}
-.welcome-card {
-    background: var(--secondary-color); color:white;
-    padding:25px; border-radius: var(--border-radius-lg);
-    margin-bottom:25px; font-size:1.1em;
-    display:flex; justify-content:space-between; align-items:center;
-}
-#teacherName {font-weight:600;}
-.content {
-    background: var(--card-background); padding:30px; border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-light);
-}
-h3 {color: var(--text-color); font-weight:600; margin-top:0; border-bottom:2px solid #eee; padding-bottom:10px; margin-bottom:20px;}
-label {display:block; margin-top:15px; margin-bottom:5px; font-weight:500;}
-input[type="text"], textarea {
-    width:100%; padding:12px; border-radius: var(--border-radius-sm);
-    border:1px solid #ddd; box-sizing:border-box; font-family:inherit;
-    transition:border-color 0.3s, box-shadow 0.3s;
-}
-input[type="text"]:focus, textarea:focus {border-color: var(--primary-color); outline:none; box-shadow:0 0 0 2px rgba(76,175,80,0.2);}
-textarea {resize:vertical; min-height:100px;}
-.btn-primary {
-    padding:12px 20px; background:var(--primary-color); color:white;
-    border:none; border-radius:var(--border-radius-sm); cursor:pointer;
-    font-size:16px; font-weight:600; margin-top:20px; transition:background 0.3s;
-}
-.btn-primary:hover {background: var(--primary-hover);}
-.btn-logout {
-    background:none; color:white; border:1px solid white;
-    padding:8px 15px; border-radius:var(--border-radius-sm); cursor:pointer;
-    font-size:14px; transition: background 0.3s;
-}
-.btn-logout:hover {background: rgba(255,255,255,0.1);}
-.footer {
-    position:fixed; bottom:10px; left:10px;
-}
-.footer img {width:240px; height:auto; cursor:pointer;}
-.footer-right {
-    position:fixed; bottom:10px; right:10px; color:#555; font-size:20px;
-}
+input[type="text"]:focus, textarea:focus, select:focus { border-color: var(--primary-color); outline:none; box-shadow:0 0 0 2px rgba(76,175,80,0.2);}
+textarea { resize: vertical; min-height:100px;}
+.btn-primary { padding:12px 20px; background:var(--primary-color); color:white; border:none; border-radius:var(--border-radius-sm); cursor:pointer; font-size:16px; font-weight:600; margin-top:20px; transition:background 0.3s;}
+.btn-primary:hover { background: var(--primary-hover);}
+.btn-logout { background:none; color:white; border:1px solid white; padding:8px 15px; border-radius:var(--border-radius-sm); cursor:pointer; font-size:14px; transition: background 0.3s;}
+.btn-logout:hover { background: rgba(255,255,255,0.1);}
+.footer-left { position: fixed; bottom: 10px; left: 10px; cursor:pointer; color: var(--secondary-color); font-weight: 600; }
+.footer-right { position: fixed; bottom: 10px; right: 10px; color: var(--secondary-text); font-size:14px;}
 </style>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBX3-pcg4gCUzHdPuRhP9BPTKbJr4zM2Mc",
@@ -87,37 +61,68 @@ const firebaseConfig = {
     messagingSenderId: "232756214397",
     appId: "1:232756214397:web:67de1961741864be744f14"
 };
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-onAuthStateChanged(auth, (user) => {
-    if(!user){ window.location.href="teacher_login.html"; } 
-    else{
-        document.body.style.display="block";
-        document.getElementById("teacherName").innerText = user.email.split('@')[0];
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        window.location.href = "teacher_login.html";
+        return;
     }
+
+    const teachersQuery = query(collection(db, "teachers"), where("email", "==", user.email));
+    const teachersSnap = await getDocs(teachersQuery);
+
+    if (teachersSnap.empty) {
+        alert("Access Denied: You do not have a teacher account.");
+        await signOut(auth);
+        window.location.href = "teacher_login.html";
+        return;
+    }
+
+    // This code only runs if the user is a verified teacher
+    document.body.style.display = "block";
+    document.getElementById("teacherName").innerText = user.email.split('@')[0];
+    document.getElementById("currentDate").innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 });
 
 window.submitAbsence = async function() {
     const className = document.getElementById("className").value;
+    const division = document.getElementById("division").value;
     const absentList = document.getElementById("absentList").value;
-    if(!className || !absentList){ alert("Fill all fields"); return; }
-    try{
-        await addDoc(collection(db,"absences"),{
+    
+    if (!className || !division || !absentList) {
+        alert("Please fill out all fields before submitting.");
+        return;
+    }
+
+    try {
+        await addDoc(collection(db, "absences"), {
             teacher: document.getElementById("teacherName").innerText,
             class: className,
+            division: division,
             absentees: absentList,
             timestamp: serverTimestamp()
         });
-        alert("Absence submitted ✅");
-        document.getElementById("absentList").value="";
-    } catch(err){ alert(err.message); }
+        alert("Absence report submitted successfully! ✅");
+        document.getElementById("className").value = "";
+        document.getElementById("division").value = "";
+        document.getElementById("absentList").value = "";
+    } catch (err) {
+        console.error("Error submitting report: ", err);
+        alert("Error submitting report: " + err.message);
+    }
 }
 
 window.logout = async function() {
     await signOut(auth);
-    window.location.href="teacher_login.html";
+    window.location.href = "teacher_login.html";
+}
+
+window.goAbout = function() {
+    window.open("about_us.html", "_blank");
 }
 </script>
 </head>
@@ -129,25 +134,34 @@ window.logout = async function() {
 
 <div class="container">
     <div class="welcome-card">
-        <span>👋 Welcome back, <span id="teacherName">Loading...</span></span>
-        <span>Today's Date: <script>document.write(new Date().toLocaleDateString('en-US'))</script></span>
+        <span>👋 Welcome back, <span id="teacherName">Verifying...</span></span>
+        <span>Today's Date: <b id="currentDate"></b></span>
     </div>
 
     <div class="content">
         <h3><i class="fas fa-clipboard-list"></i> Submit Daily Absence Report</h3>
         <form onsubmit="event.preventDefault(); submitAbsence();">
+            <label for="division">Select Division:</label>
+            <select id="division">
+                <option value="" disabled selected>-- Select a Division --</option>
+                <option value="Kindergarten">Kindergarten</option>
+                <option value="Elementary">Elementary</option>
+                <option value="High School">High School</option>
+                <option value="Technical Institute">Technical Institute</option>
+            </select>
+
             <label for="className">Class Name:</label>
-            <input type="text" id="className" placeholder="e.g., Grade 5B or Science Class">
-            <label for="absentList">Absent Students:</label>
+            <input type="text" id="className" placeholder="e.g., Math or Science Class">
+
+            <label for="absentList">Absent Students (comma-separated):</label>
             <textarea id="absentList" placeholder="Alice Smith, Bob Johnson, ..."></textarea>
+
             <button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> Submit Absence</button>
         </form>
     </div>
 </div>
 
-<div class="footer">
-    <a href="about.html"><img src="logo 1.png" alt="School Logo"></a>
-</div>
+<div class="footer-left" onclick="goAbout()"><i class="fas fa-school"></i> About Us</div>
 <div class="footer-right">Made by Ziad</div>
 </body>
 </html>
