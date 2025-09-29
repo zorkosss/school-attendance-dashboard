@@ -35,8 +35,25 @@ body { font-family:'Montserrat',sans-serif; padding:0; margin:0; background:var(
 .btn-logout:hover{background:rgba(255,255,255,0.15);}
 .reset-btn{margin-top:20px;padding:10px 15px;background:var(--primary-color);color:white;border:none;border-radius:5px;cursor:pointer;font-weight:600;}
 .reset-btn:hover{background:var(--primary-hover);}
-.footer-left { position: fixed; bottom: 10px; left: 10px; cursor:pointer; color: var(--primary-color); font-weight: 600; }
-.footer-right { position: fixed; bottom: 10px; right: 10px; color: var(--secondary-text); font-size:14px;}
+.footer-right { position: fixed; bottom: 10px; right: 10px; color: var(--secondary-text); font-size:20px;}
+
+/* --- STYLE CHANGES FOR LOGO --- */
+.footer-left {
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    cursor: pointer;
+}
+.footer-left img {
+    height: 100px; /* Adjust size as needed */
+    width: 200px;
+    opacity: 0.8;
+    transition: all 0.2s ease-in-out;
+}
+.footer-left:hover img {
+    opacity: 1;
+    transform: scale(1.1);
+}
 </style>
 
 <script type="module">
@@ -57,7 +74,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-let principalDivisions = []; // This global variable will hold the principal's allowed divisions
+let principalDivisions = [];
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
@@ -65,21 +82,16 @@ onAuthStateChanged(auth, async (user) => {
         return;
     }
 
-    // --- ROLE VERIFICATION ---
-    // Check if the logged-in user's email exists in the 'principals' collection
     const principalsQuery = query(collection(db, "principals"), where("email", "==", user.email));
     const principalsSnap = await getDocs(principalsQuery);
 
     if (principalsSnap.empty) {
-        // If the query is empty, this user is NOT a principal.
         alert("Access Denied: You are not authorized to view this page.");
-        await signOut(auth); // Log them out
-        window.location.href = "principal_login.html"; // Redirect them
+        await signOut(auth);
+        window.location.href = "principal_login.html";
         return;
     }
 
-    // --- FETCH DIVISIONS ---
-    // If the check passes, get the divisions from their document
     principalsSnap.forEach(docSnap => {
         principalDivisions = docSnap.data().divisions || [];
     });
@@ -88,7 +100,7 @@ onAuthStateChanged(auth, async (user) => {
     const principalName = user.email.split('@')[0];
     document.getElementById("welcome").innerHTML = `<i class="fas fa-handshake"></i> Welcome, <b>${principalName}</b>. Here are the latest absence reports.`;
 
-    listenForAbsences(); // Now that we have the divisions, start listening for reports
+    listenForAbsences();
 });
 
 function listenForAbsences() {
@@ -100,9 +112,6 @@ function listenForAbsences() {
 
         snapshot.forEach(doc => {
             const data = doc.data();
-            
-            // --- FILTERING LOGIC ---
-            // Only show the report if its division is in the principal's list of allowed divisions
             if (principalDivisions.includes(data.division)) {
                 reportsFound = true;
                 const card = document.createElement("div");
@@ -165,7 +174,11 @@ window.goAbout = function() {
     <button class="reset-btn" onclick="resetAbsences()">Reset Today's Absences</button>
 </div>
 
-<div class="footer-left" onclick="goAbout()"><i class="fas fa-school"></i> About Us</div>
+<!-- --- HTML CHANGE FOR LOGO --- -->
+<div class="footer-left" onclick="goAbout()">
+    <img src="logo 1.png" alt="About Us">
+</div>
+
 <div class="footer-right">Made by Ziad</div>
 </body>
 </html>
