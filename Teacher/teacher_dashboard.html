@@ -6,86 +6,60 @@
     <title>Teacher Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #43a047; /* Professional Green */
-            --primary-hover: #4caf50;
-            --accent-color: #fbc02d; /* Gold/Yellow */
-            --background-color: #eef5f0; /* Very Light Green */
-            --card-background: #ffffff;
-            --text-color: #212121;
-            --secondary-text: #5f6368;
-            --border-color: #e0e0e0;
-            --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        }
-        body { font-family: 'Roboto', sans-serif; margin: 0; background-color: var(--background-color); display: flex; flex-direction: column; min-height: 100vh; display: none; }
-        .header { background-color: var(--primary-color); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .header-title { font-size: 1.4em; font-weight: 500; display: flex; align-items: center; gap: 10px; }
-        .btn-logout { background: transparent; color: white; border: 1px solid #ffffff88; border-radius: 5px; padding: 8px 16px; cursor: pointer; transition: all 0.3s; }
-        .btn-logout:hover { background-color: rgba(255,255,255,0.1); border-color: white; }
-        .container { max-width: 900px; width: 100%; margin: 30px auto; padding: 0 15px; box-sizing: border-box; flex: 1; }
-        .welcome-card { background-color: var(--accent-color); color: var(--text-color); padding: 20px; border-radius: 8px; margin-bottom: 30px; font-size: 1.1em; box-shadow: var(--shadow); }
-        .form-container { background-color: var(--card-background); padding: 30px 40px; border-radius: 8px; box-shadow: var(--shadow); }
-        .form-container h3 { font-size: 1.5em; margin-top: 0; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--secondary-text); }
-        input[type="text"], select, textarea { width: 100%; box-sizing: border-box; padding: 12px; border-radius: 5px; border: 1px solid var(--border-color); font-size: 1em; transition: all 0.3s; }
-        input[type="text"]:focus, select:focus, textarea:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.2); }
-        textarea { resize: vertical; min-height: 120px; }
-        .btn-submit { width: 100%; padding: 14px; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: 600; margin-top: 10px; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-submit:hover { background-color: var(--primary-hover); }
-        .footer { background-color: #e0e0e0; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: #555; font-size: 0.9em; border-top: 1px solid #ccc; }
-        .footer-logo { cursor: pointer; width: 160px; height: auto; vertical-align: middle; }
-        .footer .left-side { display: flex; align-items: center; gap: 10px; }
-    </style>
+   <style>
+    :root {
+        --primary-color: #43a047;
+        --primary-hover: #4caf50;
+        --accent-color: #fbc02d;
+        --background-color: #eef5f0;
+        --card-background: #ffffff;
+        --text-color: #212121;
+        --secondary-text: #5f6368;
+        --border-color: #e0e0e0;
+        --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    body { font-family: 'Roboto', sans-serif; margin: 0; background-color: var(--background-color); display: flex; flex-direction: column; min-height: 100vh; display: none; }
+    .header { background-color: var(--primary-color); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .header-title { font-size: 1.4em; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+    .btn-logout { background: transparent; color: white; border: 1px solid #ffffff88; border-radius: 5px; padding: 8px 16px; cursor: pointer; transition: all 0.3s; }
+    .btn-logout:hover { background-color: rgba(255,255,255,0.1); border-color: white; }
+    .container { max-width: 900px; width: 100%; margin: 30px auto; padding: 0 15px; box-sizing: border-box; flex: 1; }
+    .welcome-card { background-color: var(--accent-color); color: var(--text-color); padding: 20px; border-radius: 8px; margin-bottom: 30px; font-size: 1.1em; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .form-container { background-color: var(--card-background); padding: 30px 40px; border-radius: 8px; box-shadow: var(--shadow); }
+    .form-container h3 { font-size: 1.5em; margin-top: 0; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--secondary-text); }
+    input[type="text"], select, textarea { width: 100%; box-sizing: border-box; padding: 12px; border-radius: 5px; border: 1px solid var(--border-color); font-size: 1em; transition: all 0.3s; }
+    input[type="text"]:focus, select:focus, textarea:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.2); }
+    textarea { resize: vertical; min-height: 120px; }
+    .btn-submit { width: 100%; padding: 14px; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: 600; margin-top: 10px; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-submit:hover { background-color: var(--primary-hover); }
+    .footer { background-color: #e0e0e0; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: #555; font-size: 0.9em; border-top: 1px solid #ccc; }
+    .footer .left-side { display: flex; align-items: center; gap: 10px; }
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-        
-        const firebaseConfig = { apiKey: "AIzaSyBX3-pcg4gCUzHdPuRhP9BPTKbJr4zM2Mc", authDomain: "school-attendance-81385.firebaseapp.com", projectId: "school-attendance-81385", storageBucket: "school-attendance-81385.firebasestorage.app", messagingSenderId: "232756214397", appId: "1:232756214397:web:67de1961741864be744f14" };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    /* --- LOGO STYLES ARE NOW SEPARATE --- */
+    .footer-logo-about, .footer-logo-rhti {
+        cursor: pointer;
+        height: 110px; /* Maintain aspect ratio */
+        vertical-align: middle;
+    }
 
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) { window.location.href = "teacher_login.html"; return; }
+    .footer-logo-about {
+        width: 170px; /* You can edit the "About Us" logo size here */
+    }
 
-            const teacherDocRef = doc(db, "teachers", user.uid);
-            const teacherDocSnap = await getDoc(teacherDocRef);
+    .footer-logo-rhti {
+        width: 170px; /* You can edit the "RHTI Logo" size here */
+    }
 
-            if (!teacherDocSnap.exists()) {
-                alert("Access Denied: You do not have a teacher account.");
-                await signOut(auth);
-                window.location.href = "teacher_login.html";
-                return;
-            }
-            
-            document.body.style.display = "flex";
-            document.getElementById("teacherName").innerText = user.email.split('@')[0];
-            document.getElementById("currentDate").innerText = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-        });
-        
-        window.submitAbsence = async function() {
-            const className = document.getElementById("className").value;
-            const division = document.getElementById("division").value;
-            const absentList = document.getElementById("absentList").value;
-            if (!className || !division || !absentList) { alert("Please fill out all fields."); return; }
-            try {
-                await addDoc(collection(db, "absences"), { teacher: document.getElementById("teacherName").innerText, class: className, division: division, absentees: absentList, timestamp: serverTimestamp() });
-                alert("Absence report submitted successfully!");
-                document.getElementById("className").value = "";
-                document.getElementById("division").value = "";
-                document.getElementById("absentList").value = "";
-            } catch (err) {
-                alert("Error: " + err.message);
-            }
-        };
-
-        window.logout = async function() { await signOut(auth); window.location.href = "teacher_login.html"; }
-        window.goAbout = function() { window.open("about_us.html", "_blank"); }
-    </script>
+    /* --- Responsive Design Media Queries --- */
+    @media (max-width: 768px) {
+        .welcome-card { flex-direction: column; text-align: center; gap: 10px; }
+        .form-container { padding: 20px; }
+        .footer { flex-direction: column; gap: 10px; text-align: center; }
+        .footer .left-side { flex-direction: column; gap: 5px; }
+    }
+</style>
 </head>
 <body>
     <div class="header">
@@ -95,7 +69,8 @@
 
     <div class="container">
         <div class="welcome-card">
-            <span>👋 Welcome back, <b id="teacherName">...</b> Today's Date: <b id="currentDate">...</b></span>
+            <span>👋 Welcome back, <b id="teacherName">...</b></span>
+            <span>Today's Date: <b id="currentDate">...</b></span>
         </div>
 
         <div class="form-container">
@@ -125,11 +100,65 @@
     </div>
 
     <div class="footer">
-        <div class="left-side">
-            <img src="logo 1.png" alt="About Us" class="footer-logo" onclick="goAbout()">
-            <span>© 2025 RHTI. All rights reserved. Made by Ziad</span>
-        </div>
-        <img src="logo 2.png" alt="RHTI Logo" class="footer-logo">
+    <div class="left-side">
+        <!-- Use the 'footer-logo-about' class for the first logo -->
+        <img src="logo 1.png" alt="About Us" class="footer-logo-about" onclick="goAbout()">
+        <span>© 2025 RHTI. All rights reserved. Made by Ziad</span>
     </div>
+    <!-- Use the 'footer-logo-rhti' class for the second logo -->
+    <img src="logo 2.png" alt="RHTI Logo" class="footer-logo-rhti">
+</div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+        
+        const firebaseConfig = { apiKey: "AIzaSyBX3-pcg4gCUzHdPuRhP9BPTKbJr4zM2Mc", authDomain: "school-attendance-81385.firebaseapp.com", projectId: "school-attendance-81385", storageBucket: "school-attendance-81385.firebasestorage.app", messagingSenderId: "232756214397", appId: "1:232756214397:web:67de1961741864be744f14" };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) { window.location.href = "teacher_login.html"; return; }
+            const teacherDocRef = doc(db, "teachers", user.uid);
+            const teacherDocSnap = await getDoc(teacherDocRef);
+            if (!teacherDocSnap.exists()) {
+                alert("Access Denied: You do not have a teacher account.");
+                await signOut(auth);
+                window.location.href = "teacher_login.html";
+                return;
+            }
+            document.body.style.display = "flex";
+            document.getElementById("teacherName").innerText = user.email.split('@')[0];
+            document.getElementById("currentDate").innerText = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        });
+        
+        window.submitAbsence = async function() {
+            const className = document.getElementById("className").value;
+            const division = document.getElementById("division").value;
+            const absentList = document.getElementById("absentList").value;
+            if (!className || !division || !absentList) { alert("Please fill out all fields."); return; }
+            try {
+                await addDoc(collection(db, "absences"), {
+                    teacher: document.getElementById("teacherName").innerText,
+                    class: className,
+                    division: division,
+                    absentees: absentList,
+                    timestamp: serverTimestamp(),
+                    status: 'active' // Add status field on creation
+                });
+                alert("Absence report submitted successfully!");
+                document.getElementById("className").value = "";
+                document.getElementById("division").value = "";
+                document.getElementById("absentList").value = "";
+            } catch (err) {
+                alert("Error: " + err.message);
+            }
+        };
+
+        window.logout = async function() { await signOut(auth); window.location.href = "teacher_login.html"; }
+        window.goAbout = function() { window.open("about_us.html", "_blank"); }
+    </script>
 </body>
 </html>
