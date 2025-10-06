@@ -113,11 +113,20 @@
             
             const serverReports = await response.json();
             
+            // --- THIS IS THE CORRECTED LOGIC ---
+            // 1. Get all reports for this principal from the server
             allAbsences = serverReports
-                .map(report => ({ ...report, timestamp: new Date(report.timestamp) }))
+                .map(report => ({
+                    ...report,
+                    timestamp: new Date(report.timestamp) // Convert string back to Date object
+                }))
                 .filter(report => principalDivisions.includes(report.division));
 
-            renderReports(allAbsences); // Call a new function to render
+            // 2. Create a second list that ONLY contains active (not archived) reports
+            const activeAbsences = allAbsences.filter(report => report.status !== 'archived');
+
+            // 3. Render ONLY the active reports
+            renderReports(activeAbsences);
 
         } catch (error) {
             console.error("Failed to fetch absences:", error);
@@ -125,14 +134,14 @@
         }
     }
 
-    function renderReports(reports) {
+    function renderReports(reportsToDisplay) {
         const reportsContainer = document.getElementById("absenceList");
         const emptyStateContainer = document.getElementById("empty-state-container");
         reportsContainer.innerHTML = '';
 
-        if (reports.length > 0) {
+        if (reportsToDisplay.length > 0) {
             emptyStateContainer.style.display = 'none';
-            reports.forEach(reportData => {
+            reportsToDisplay.forEach(reportData => {
                 const card = document.createElement("div");
                 card.className = "card";
                 card.id = `card-${reportData.id}`;
@@ -153,24 +162,17 @@
         }
     }
 
-    // --- FINAL, CORRECTED resetAbsences FUNCTION ---
     window.resetAbsences = async function() {
         if (!confirm("Are you sure you want to permanently delete today's absences? This action cannot be undone.")) return;
-
         try {
             const response = await fetch('https://ziad-school-app.onrender.com/absences/today', {
-                method: 'DELETE' // Use the DELETE HTTP method
+                method: 'DELETE'
             });
-
             const resultText = await response.text();
             alert(resultText);
-
             if (response.ok) {
-                // Optimistic Update: Manually remove today's reports from the screen
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                allAbsences = allAbsences.filter(report => report.timestamp < today);
-                renderReports(allAbsences);
+                // Manually refresh the data from the server to show the change
+                fetchAbsences();
             }
         } catch (error) {
             alert("An error occurred: " + error.message);
@@ -179,6 +181,12 @@
     
     window.logout = async function() { await auth.signOut(); window.location.href = "principal_login.html"; }
     window.goAbout = function() { window.open("about_us.html", "_blank"); }
+
+    // --- You will also need to add these compat scripts to the <head> of the HTML ---
+    // if they are not already there.
+    // <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    // <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    // <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </script>
 </body>
 </html>
