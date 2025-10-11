@@ -12,47 +12,59 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     
     <style>
-        :root {
-            --primary-color: #2E7D32; /* Richer, Darker Green */
-            --primary-hover: #388E3C;
-            --background-color: #e8f5e9; 
-            --card-background: #ffffff;
-            --text-color: #212121;
-            --secondary-text: #5f6368;
-            --border-color: #e0e0e0;
-            --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        }
-        body { font-family: 'Roboto', sans-serif; margin: 0; background-color: var(--background-color); display: flex; flex-direction: column; min-height: 100vh; display: none; }
-        .header { background-color: var(--primary-color); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .header-title { font-size: 1.4em; font-weight: 500; display: flex; align-items: center; gap: 10px; }
-        .btn-logout { background: transparent; color: white; border: 1px solid #ffffff88; border-radius: 5px; padding: 8px 16px; cursor: pointer; transition: all 0.3s; }
-        .btn-logout:hover { background-color: rgba(255,255,255,0.1); border-color: white; }
-        .container { max-width: 1400px; width: 100%; margin: 30px auto; padding: 0 15px; box-sizing: border-box; flex: 1; }
-        .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 15px; }
-        .page-title { font-size: 1.8em; font-weight: 700; color: var(--text-color); }
-        .btn-reset { background-color: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 500; transition: background-color 0.2s; white-space: nowrap; }
-        .btn-reset:hover { background-color: var(--primary-hover); }
-        #absenceList { display: grid; gap: 25px; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); }
-        .card { background-color: var(--card-background); border-radius: 8px; box-shadow: var(--shadow); overflow: hidden; }
-        .card-header { padding: 15px 20px; border-bottom: 1px solid var(--border-color); font-size: 1.2em; font-weight: 700; background-color: #fafafa; display: flex; align-items: center; gap: 10px; }
-        .card-body { padding: 20px; display: grid; gap: 12px; }
-        .card-body p { margin: 0; display: flex; align-items: center; gap: 10px; color: var(--secondary-text); }
-        .card-body i { color: var(--primary-color); width: 20px; text-align: center; }
-        .card-footer { padding: 12px 20px; border-top: 1px solid var(--border-color); font-size: 0.85em; color: #777; background-color: #fafafa; }
-        .footer { background-color: #e0e0e0; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: #555; font-size: 0.9em; border-top: 1px solid #ccc; }
-        .footer-logo { cursor: pointer; width: 240px; height: auto; vertical-align: middle; }
-        .footer .left-side { display: flex; align-items: center; gap: 10px; }
-        .empty-state { text-align: center; padding: 60px; color: var(--secondary-text); grid-column: 1 / -1; background-color: var(--card-background); border-radius: 8px; box-shadow: var(--shadow); }
-        .empty-state i { font-size: 3em; margin-bottom: 15px; color: #bdbdbd; }
+    :root {
+        --primary-color: #2E7D32; /* Richer, Darker Green */
+        --primary-hover: #388E3C;
+        --background-color: #e8f5e9; 
+        --card-background: #ffffff;
+        --text-color: #212121;
+        --secondary-text: #5f6368;
+        --border-color: #e0e0e0;
+        --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    body { font-family: 'Roboto', sans-serif; margin: 0; background-color: var(--background-color); display: flex; flex-direction: column; min-height: 100vh; display: none; }
+    .header { background-color: var(--primary-color); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .header-title { font-size: 1.4em; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+    .btn-logout { background: transparent; color: white; border: 1px solid #ffffff88; border-radius: 5px; padding: 8px 16px; cursor: pointer; transition: all 0.3s; }
+    .btn-logout:hover { background-color: rgba(255,255,255,0.1); border-color: white; }
+    .container { max-width: 1400px; width: 100%; margin: 30px auto; padding: 0 15px; box-sizing: border-box; flex: 1; }
+    .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 15px; }
+    .page-title { font-size: 1.8em; font-weight: 700; color: var(--text-color); }
+    .btn-reset { background-color: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 500; transition: background-color 0.2s; white-space: nowrap; }
+    .btn-reset:hover { background-color: var(--primary-hover); }
+    #absenceList { display: grid; gap: 25px; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); }
+    .card { background-color: var(--card-background); border-radius: 8px; box-shadow: var(--shadow); overflow: hidden; }
+    .card-header { padding: 15px 20px; border-bottom: 1px solid var(--border-color); font-size: 1.2em; font-weight: 700; background-color: #fafafa; display: flex; align-items: center; gap: 10px; }
+    .card-body { padding: 20px; display: grid; gap: 12px; }
+    .card-body p { margin: 0; display: flex; align-items: center; gap: 10px; color: var(--secondary-text); }
+    .card-body i { color: var(--primary-color); width: 20px; text-align: center; }
+    .card-footer { padding: 12px 20px; border-top: 1px solid var(--border-color); font-size: 0.85em; color: #777; background-color: #fafafa; }
+    .footer { background-color: #e0e0e0; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: #555; font-size: 0.9em; border-top: 1px solid #ccc; }
+    .footer .left-side { display: flex; align-items: center; gap: 10px; }
+    .empty-state { text-align: center; padding: 60px; color: var(--secondary-text); grid-column: 1 / -1; background-color: var(--card-background); border-radius: 8px; box-shadow: var(--shadow); }
+    .empty-state i { font-size: 3em; margin-bottom: 15px; color: #bdbdbd; }
 
-        @media (max-width: 768px) {
-            #absenceList { grid-template-columns: 1fr; }
-            .action-bar { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .footer { flex-direction: column; gap: 10px; text-align: center; }
-            .footer .left-side { flex-direction: column; gap: 10px; }
-            .page-title { font-size: 1.5em; }
-        }
-    </style>
+    /* --- LOGO STYLES ARE NOW SEPARATE --- */
+    .footer-logo-about, .footer-logo-rhti {
+        cursor: pointer;
+        height: auto;
+        vertical-align: middle;
+    }
+    .footer-logo-about {
+        width: 240px; /* Edit "About Us" logo size */
+    }
+    .footer-logo-rhti {
+        width: 240px; /* Edit "RHTI Logo" size */
+    }
+
+    @media (max-width: 768px) {
+        #absenceList { grid-template-columns: 1fr; }
+        .action-bar { flex-direction: column; align-items: flex-start; gap: 15px; }
+        .footer { flex-direction: column; gap: 15px; text-align: center; }
+        .footer .left-side { flex-direction: column; gap: 10px; }
+        .page-title { font-size: 1.5em; }
+    }
+</style>
 </head>
 <body>
     <div class="header">
@@ -73,10 +85,10 @@
 
     <div class="footer">
         <div class="left-side">
-            <img src="../assets/About Us.png" alt="About Us" class="footer-logo" onclick="goAbout()">
+            <img src="logo 1.png" alt="About Us" class="footer-logo" onclick="goAbout()">
             <span>© 2025 RHTI. All rights reserved. Made by Ziad</span>
         </div>
-        <img src="../assets/RHTI Logo.png" alt="RHTI Logo" class="footer-logo">
+        <img src="logo 2.png" alt="RHTI Logo" class="footer-logo">
     </div>
 
     <script>
@@ -174,3 +186,4 @@
     </script>
 </body>
 </html>
+
