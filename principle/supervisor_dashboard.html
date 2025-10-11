@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Principal Dashboard</title>
+    <title>Supervisor Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
@@ -56,7 +56,7 @@
 </head>
 <body>
     <div class="header">
-        <div class="header-title"><i class="fas fa-shield-halved"></i> Principal Dashboard</div>
+        <div class="header-title"><i class="fas fa-user-shield"></i> Supervisor Dashboard</div>
         <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
 
@@ -85,20 +85,23 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         
-        let principalDivisions = [];
+        let supervisorDivisions = [];
         let allAbsences = [];
 
         auth.onAuthStateChanged(async (user) => {
-            if (!user) { window.location.href = "principal_login.html"; return; }
-            const principalDocRef = db.collection("principals").doc(user.uid);
-            const principalDocSnap = await principalDocRef.get();
-            if (!principalDocSnap.exists) {
-                alert("Access Denied.");
+            if (!user) { window.location.href = "supervisor_login.html"; return; }
+            
+            const supervisorDocRef = db.collection("principals").doc(user.uid);
+            const supervisorDocSnap = await supervisorDocRef.get();
+
+            if (!supervisorDocSnap.exists) {
+                alert("Access Denied: You do not have a supervisor account.");
                 await auth.signOut();
-                window.location.href = "principal_login.html";
+                window.location.href = "supervisor_login.html";
                 return;
             }
-            principalDivisions = principalDocSnap.data().divisions || [];
+            
+            supervisorDivisions = supervisorDocSnap.data().divisions || [];
             document.body.style.display = "flex";
             fetchAbsences();
         });
@@ -112,7 +115,7 @@
                 
                 allAbsences = serverReports
                     .map(report => ({ ...report, timestamp: new Date(report.timestamp) }))
-                    .filter(report => principalDivisions.includes(report.division));
+                    .filter(report => supervisorDivisions.includes(report.division));
 
                 const activeAbsences = allAbsences.filter(report => report.status !== 'archived');
                 renderReports(activeAbsences);
@@ -134,7 +137,6 @@
                     card.className = "card";
                     const formattedTime = reportData.timestamp.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
                     
-                    // --- THIS IS THE FINAL, CORRECTED HTML ---
                     card.innerHTML = `
                         <div class="card-header"><i class="fas fa-school"></i> ${reportData.class}</div>
                         <div class="card-body">
@@ -167,7 +169,7 @@
             }
         }
         
-        window.logout = async function() { await auth.signOut(); window.location.href = "principal_login.html"; }
+        window.logout = async function() { await auth.signOut(); window.location.href = "supervisor_login.html"; }
         window.goAbout = function() { window.open("about_us.html", "_blank"); }
     </script>
 </body>
