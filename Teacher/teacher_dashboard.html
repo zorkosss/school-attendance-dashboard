@@ -12,44 +12,61 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     
     <style>
-        :root {
-            --primary-color: #2E7D32;
-            --primary-hover: #388E3C;
-            --accent-color: #fbc02d;
-            --background-color: #eef5f0;
-            --card-background: #ffffff;
-            --text-color: #212121;
-            --secondary-text: #5f6368;
-            --border-color: #e0e0e0;
-            --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        }
-        body { font-family: 'Roboto', sans-serif; margin: 0; background-color: var(--background-color); display: flex; flex-direction: column; min-height: 100vh; display: none; }
-        .header { background-color: var(--primary-color); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .header-title { font-size: 1.4em; font-weight: 500; display: flex; align-items: center; gap: 10px; }
-        .btn-logout { background: transparent; color: white; border: 1px solid #ffffff88; border-radius: 5px; padding: 8px 16px; cursor: pointer; transition: all 0.3s; }
-        .btn-logout:hover { background-color: rgba(255,255,255,0.1); border-color: white; }
-        .container { max-width: 900px; width: 100%; margin: 30px auto; padding: 0 15px; box-sizing: border-box; flex: 1; }
-        .welcome-card { background-color: var(--accent-color); color: var(--text-color); padding: 20px; border-radius: 8px; margin-bottom: 30px; font-size: 1.1em; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .form-container { background-color: var(--card-background); padding: 30px 40px; border-radius: 8px; box-shadow: var(--shadow); }
-        .form-container h3 { font-size: 1.5em; margin-top: 0; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--secondary-text); }
-        select, textarea { width: 100%; box-sizing: border-box; padding: 12px; border-radius: 5px; border: 1px solid var(--border-color); font-size: 1em; transition: all 0.3s; }
-        select:focus, textarea:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.2); }
-        select:disabled { background-color: #f5f5f5; cursor: not-allowed; }
-        textarea { resize: vertical; min-height: 120px; }
-        .btn-submit { width: 100%; padding: 14px; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: 600; margin-top: 10px; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-submit:hover { background-color: var(--primary-hover); }
-        .footer { background-color: #e0e0e0; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: #555; font-size: 0.9em; border-top: 1px solid #ccc; }
-        .footer-logo { cursor: pointer; width: 240px; height: auto; vertical-align: middle; }
-        .footer .left-side { display: flex; align-items: center; gap: 10px; }
-        @media (max-width: 768px) {
-            .welcome-card { flex-direction: column; text-align: center; gap: 10px; }
-            .form-container { padding: 20px; }
-            .footer { flex-direction: column; gap: 15px; text-align: center; }
-            .footer .left-side { flex-direction: column; gap: 10px; }
-        }
-    </style>
+    :root {
+        --primary-color: #2E7D32; /* Richer, Darker Green */
+        --primary-hover: #388E3C;
+        --accent-color: #fbc02d;
+        --background-color: #e8f5e9;
+        --card-background: #ffffff;
+        --text-color: #212121;
+        --secondary-text: #5f6368;
+        --border-color: #e0e0e0;
+        --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    body { font-family: 'Roboto', sans-serif; margin: 0; background-color: var(--background-color); display: flex; flex-direction: column; min-height: 100vh; display: none; }
+    .header { background-color: var(--primary-color); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .header-title { font-size: 1.4em; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+    .btn-logout { background: transparent; color: white; border: 1px solid #ffffff88; border-radius: 5px; padding: 8px 16px; cursor: pointer; transition: all 0.3s; }
+    .btn-logout:hover { background-color: rgba(255,255,255,0.1); border-color: white; }
+    .container { max-width: 900px; width: 100%; margin: 30px auto; padding: 0 15px; box-sizing: border-box; flex: 1; }
+    .welcome-card { background-color: var(--accent-color); color: var(--text-color); padding: 20px; border-radius: 8px; margin-bottom: 30px; font-size: 1.1em; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .form-container { background-color: var(--card-background); padding: 30px 40px; border-radius: 8px; box-shadow: var(--shadow); }
+    .form-container h3 { font-size: 1.5em; margin-top: 0; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--secondary-text); }
+    select, textarea { width: 100%; box-sizing: border-box; padding: 12px; border-radius: 5px; border: 1px solid var(--border-color); font-size: 1em; transition: all 0.3s; }
+    select:focus, textarea:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2); }
+    select:disabled { background-color: #f5f5f5; cursor: not-allowed; }
+    textarea { resize: vertical; min-height: 120px; }
+    .btn-submit { width: 100%; padding: 14px; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: 600; margin-top: 10px; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-submit:hover { background-color: var(--primary-hover); }
+    .footer { background-color: #e0e0e0; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: #555; font-size: 0.9em; border-top: 1px solid #ccc; }
+    .footer .left-side { display: flex; align-items: center; gap: 15px; } /* Increased gap for better spacing */
+    
+    /* --- LOGO STYLES WITH BALANCED SIZE --- */
+    .footer-logo-about, .footer-logo-rhti {
+        cursor: pointer;
+        height: auto;
+        vertical-align: middle;
+        transition: opacity 0.2s ease-in-out;
+    }
+    .footer-logo-about:hover, .footer-logo-rhti:hover {
+        opacity: 0.8;
+    }
+    .footer-logo-about {
+        width: 180px; /* Balanced size */
+    }
+    .footer-logo-rhti {
+        width: 150px; /* Balanced size */
+    }
+
+    @media (max-width: 768px) {
+        .welcome-card { flex-direction: column; text-align: center; gap: 10px; }
+        .form-container { padding: 20px; }
+        .footer { flex-direction: column; gap: 15px; text-align: center; }
+        .footer .left-side { flex-direction: column; gap: 10px; }
+    }
+</style>
 </head>
 <body>
     <div class="header">
@@ -94,12 +111,14 @@
     </div>
 
     <div class="footer">
-        <div class="left-side">
-            <img src="../assets/About Us.png" alt="About Us" class="footer-logo" onclick="goAbout()">
-            <span>© 2025 RHTI. All rights reserved. Made by Ziad</span>
-        </div>
-        <img src="../assets/RHTI Logo.png" alt="RHTI Logo" class="footer-logo">
+    <div class="left-side">
+        <!-- Use the 'footer-logo-about' class -->
+        <img src="logo 1.png" alt="About Us" class="footer-logo-about" onclick="goAbout()">
+        <span>© 2025 RHTI. All rights reserved. Made by Ziad</span>
     </div>
+    <!-- Use the 'footer-logo-rhti' class -->
+    <img src="logo 2.png" alt="RHTI Logo" class="footer-logo-rhti">
+</div>
 
     <script>
         const firebaseConfig = { apiKey: "AIzaSyBX3-pcg4gCUzHdPuRhP9BPTKbJr4zM2Mc", authDomain: "school-attendance-81385.firebaseapp.com", projectId: "school-attendance-81385", storageBucket: "school-attendance-81385.firebasestorage.app", messagingSenderId: "232756214397", appId: "1:232756214397:web:67de1961741864be744f14" };
