@@ -65,8 +65,6 @@
         .teacher-btn:hover { background-color: #2980b9; transform: translateY(-2px); }
         .supervisor-btn { background-color: var(--primary-color); }
         .supervisor-btn:hover { background-color: #388E3C; transform: translateY(-2px); }
-
-        /* --- NEW CSS FOR LOGOS --- */
         .logo-footer {
             margin-top: 40px;
             padding-top: 20px;
@@ -76,7 +74,7 @@
             align-items: center;
         }
         .footer-logo {
-            height: 40px; /* Adjust size as needed */
+            height: 40px;
             width: auto;
         }
         .about-logo {
@@ -92,23 +90,22 @@
     <div class="portal-container">
         <h1>School Attendance Portal</h1>
         <div class="button-group">
-            <button class="portal-btn supervisor-btn" onclick="location.href='https://zorkosss.github.io/school-attendance-dashboard/principle/supervisor_login.html'">
+            <!-- --- THIS IS THE CORRECTED CODE --- -->
+            <!-- Add the folder path before the filename -->
+            <button class="portal-btn supervisor-btn" onclick="location.href='Supervisor/supervisor_login.html'">
                 <i class="fas fa-user-shield"></i>
                 Supervisor Login
             </button>
-            <button class="portal-btn teacher-btn" onclick="location.href='https://zorkosss.github.io/school-attendance-dashboard/teacher/teacher_login.html'">
+            <button class="portal-btn teacher-btn" onclick="location.href='Teacher/teacher_login.html'">
                 <i class="fas fa-chalkboard-teacher"></i>
                 Teacher Login
             </button>
         </div>
 
-        <!-- --- NEW HTML FOR LOGOS --- -->
         <div class="logo-footer">
             <img src="assets/About Us.png" alt="About Us" class="footer-logo about-logo" onclick="location.href='about_us.html'">
             <img src="assets/RHTI Logo.png" alt="RHTI Logo" class="footer-logo">
         </div>
     </div>
 </body>
-
 </html>
-
